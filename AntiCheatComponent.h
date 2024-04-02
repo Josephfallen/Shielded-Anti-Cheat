@@ -1,3 +1,5 @@
+// AntiCheatComponent.h
+
 #pragma once
 
 #include "CoreMinimal.h"
@@ -12,7 +14,12 @@ class YOURPROJECT_API UAntiCheatComponent : public UActorComponent
 public:
     UAntiCheatComponent();
 
-    UFUNCTION(BlueprintCallable, Category = "AntiCheat")
-    void ValidatePlayerData(FString PlayerId, float Speed, float Visibility, float Accuracy);
+    virtual void ValidatePlayerData(FString PlayerId, float Speed, float Visibility, float Accuracy);
+
+private:
+    bool ScanForDLLs();
+    void banPlayer(FString PlayerId);
+    void KickPlayer(FString PlayerId);
+
+    TArray<FString> banList;
 };
-#pragma once
