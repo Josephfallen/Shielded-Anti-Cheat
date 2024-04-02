@@ -8,7 +8,7 @@ Key Features:
 
     Real-Time Monitoring: Our system operates in real-time, continuously scanning and monitoring DLL files to detect any unexpected changes or manipulations.
 
-    Immediate Alerts: Upon detecting suspicious DLL modifications, Shielded DLL Monitor promptly sends alerts to administrators or game moderators, allowing for swift intervention and investigation.
+    Immediate Alerts: Upon detecting suspicious DLL modifications, Shielded DLL Monitor promptly sends alerts to administrators or game moderators, allowing for swift intervention and investigation. (WIP)
 
     Intelligent Analysis: Utilizing sophisticated algorithms and heuristics, our anti-cheat system distinguishes between legitimate updates and potentially malicious changes, minimizing false positives and ensuring accurate threat detection.
 
