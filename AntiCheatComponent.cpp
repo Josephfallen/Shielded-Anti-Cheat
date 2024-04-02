@@ -36,6 +36,31 @@ void UAntiCheatComponent::ValidatePlayerData(FString PlayerId, float Speed, floa
         // Ban the player if the target DLLs are detected
         banPlayer(PlayerId);
     }
+
+    // Check File Integrity
+    bool IsFileIntegrityValid = CheckFileIntegrity(GameFilePath, ExpectedChecksum);
+    bool IsMemoryProtected = ProtectMemory(MemoryAddress, MemorySize);
+
+    if (!IsFileIntegrityValid || !IsMemoryProtected)
+    {
+        // Handle tampering attempts
+        KickPlayer(PlayerId);
+    }
+
+    // Validate Player Position and Score (Replace with actual server values)
+    FVector ServerPosition = FVector::ZeroVector;  // Replace with actual server position
+    FVector ClientPosition = FVector::ZeroVector;  // Replace with actual client position
+    int32 ServerScore = 0;  // Replace with actual server score
+    int32 ClientScore = 0;  // Replace with actual client score
+
+    bool IsValidState = ValidatePlayerPosition(ServerPosition, ClientPosition, 10.0f);
+    bool IsValidScore = ValidatePlayerScore(ServerScore, ClientScore);
+
+    if (!IsValidState || !IsValidScore)
+    {
+        // Handle cheating or game state inconsistency
+        KickPlayer(PlayerId);
+    }
 }
 
 void UAntiCheatComponent::OnValidateResponseReceived(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bSuccess)
@@ -153,4 +178,61 @@ void UAntiCheatComponent::KickPlayer(FString PlayerId)
                 PlayerController->Kick();
             }, 5.f, false);  // Delay kicking the player by 5 seconds
     }
+}
+
+// Check File Integrity
+bool UAntiCheatComponent::CheckFileIntegrity(FString FilePath, FString ExpectedChecksum)
+{
+    // Read the file content
+    TArray<uint8> FileData;
+    if (FFileHelper::LoadFileToArray(FileData, *FilePath))
+    {
+        // Calculate the checksum of the file content
+        FString CalculatedChecksum = FMD5::HashAnsiString((const ANSICHAR*)FileData.GetData(), FileData.Num());
+
+        // Compare the calculated checksum with the expected checksum
+        if (CalculatedChecksum != ExpectedChecksum)
+        {
+            // Detected possible tampering with game files
+            return false;
+        }
+    }
+
+    return true;
+}
+
+// Memory Protection (Example for Windows platform)
+bool UAntiCheatComponent::ProtectMemory(void* MemoryAddress, SIZE_T Size)
+{
+    DWORD OldProtection;
+    return VirtualProtect(MemoryAddress, Size, PAGE_READWRITE, &OldProtection);
+}
+
+// Validate Player Position
+bool UAntiCheatComponent::ValidatePlayerPosition(FVector ServerPosition, FVector ClientPosition, float Tolerance)
+{
+    // Calculate the distance between the server and client positions
+    float Distance = FVector::Dist(ServerPosition, ClientPosition);
+
+    // Check if the distance exceeds the tolerance limit
+    if (Distance > Tolerance)
+    {
+        // Detected possible cheating or game state inconsistency
+        return false;
+    }
+
+    return true;
+}
+
+// Validate Player Score
+bool UAntiCheatComponent::ValidatePlayerScore(int32 ServerScore, int32 ClientScore)
+{
+    // Check if the client score matches the server score
+    if (ClientScore != ServerScore)
+    {
+        // Detected possible cheating or game state inconsistency
+        return false;
+    }
+
+    return true;
 }
