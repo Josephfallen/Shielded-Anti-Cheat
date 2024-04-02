@@ -184,7 +184,7 @@ bool UAntiCheatComponent::ScanForDLLs()
     {
         for (unsigned int i = 0; i < (cbNeeded / sizeof(HMODULE)); i++)
         {
-            char szModName[MAX_PATH];
+            char szModName[MAX c_PATH];
             if (GetModuleFileNameExA(hProcess, hMods[i], szModName, sizeof(szModName) / sizeof(char)))
             {
                 for (const char* targetDLL : targetDLLs)
@@ -202,8 +202,13 @@ bool UAntiCheatComponent::ScanForDLLs()
 
 void UAntiCheatComponent::banPlayer(FString PlayerId)
 {
-    banList.Add(PlayerId);
+    BanList.Add(PlayerId);
     KickPlayer(PlayerId);
+}
+
+void UAntiCheatComponent::UnbanPlayer(const FString& PlayerId)
+{
+    BanList.Remove(PlayerId);
 }
 
 void UAntiCheatComponent::KickPlayer(FString PlayerId)

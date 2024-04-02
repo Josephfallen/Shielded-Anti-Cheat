@@ -89,7 +89,14 @@ public:
      *
      * @param PlayerId The ID of the player to ban.
      */
-    void banPlayer(FString PlayerId);
+    void BanPlayer(FString PlayerId);
+
+    /**
+     * Unban a player by removing them from the ban list.
+     *
+     * @param PlayerId The ID of the player to unban.
+     */
+    void UnbanPlayer(FString PlayerId);
 
     /**
      * Kick a player from the game.
@@ -139,7 +146,7 @@ private:
     /**
      * List of banned player IDs.
      */
-    TArray<FString> banList;
+    TArray<FString> BanList;
 
     /**
      * Path to the game file being validated.
