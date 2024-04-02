@@ -11,7 +11,7 @@ void UAntiCheatComponent::ValidatePlayerData(FString PlayerId, float Speed, floa
 {
     TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = FHttpModule::Get().CreateRequest();
     Request->SetVerb("POST");
-    Request->SetURL("http://your_server_ip:5000/validate");  // Replace with your server IP address
+    Request->SetURL("http://127.0.0.1:5000/validate");  // Replace with your server IP address
     Request->SetHeader("Content-Type", "application/json");
 
     FString JsonPayload = FString::Printf(TEXT("{\"player_id\": \"%s\", \"speed\": %f, \"visibility\": %f, \"accuracy\": %f}"), *PlayerId, Speed, Visibility, Accuracy);
