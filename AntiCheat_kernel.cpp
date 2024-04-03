@@ -1,4 +1,7 @@
 #include <ntddk.h>
+#include <ntstrsafe.h>
+#include <ntddkbd.h>
+#include <ntddmou.h>
 
 NTSTATUS DriverEntry(_In_ PDRIVER_OBJECT DriverObject, _In_ PUNICODE_STRING RegistryPath);
 
