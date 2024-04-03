@@ -18,7 +18,7 @@ It's important to note that without the actual code and context in which these s
 
 ### AsIO.dll
 
-    GUID: Represents a globally unique identifier.
+GUID: Represents a globally unique identifier.
     _EH4_SCOPETABLE_RECORD and _EH4_SCOPETABLE: These structures are related to exception handling, defining the scope and handlers for different parts of the code.
     _EH3_EXCEPTION_REGISTRATION: Represents an exception registration record used in the Structured Exception Handling (SEH) mechanism in Windows.
     CPPEH_RECORD: A structure that seems to contain information related to C++ exception handling.
@@ -131,7 +131,7 @@ Here's how these structures could potentially interact with the game:
 
 
 
-    ### enco.dll
+ ### enco.dll
 
 1. **GUID Structure**:
     ```c
