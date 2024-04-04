@@ -4,6 +4,12 @@ Description:
 
 Shielded DLL Monitor is an advanced anti-cheat solution designed to meticulously watch and safeguard against unauthorized DLL (Dynamic Link Library) changes within gaming environments. As one of the most common methods employed by cheaters to manipulate and exploit games, unauthorized DLL alterations pose a significant threat to fair play and game integrity.
 
+### Application info
+`Server.js` is under development/not needed at this point, Further updates may not have it.
+> [!IMPORTANT]  
+> DO NOT RUN THE KERNEL LEVEL `.dll` ANTICHEAT, IT WILL BLUESCREEN ANY SYSTEM!
+This branch is a test for a .dll monotor and a kernel level .dll monotor
+
 Key Features:
 
     Real-Time Monitoring: Our system operates in real-time, continuously scanning and monitoring DLL files to detect any unexpected changes or manipulations.
@@ -20,9 +26,5 @@ By choosing Shielded DLL Monitor, game developers and administrators can maintai
 ```cpp
 UnbanPlayer(PlayerId);
 ```
-#### Application info
-`Server.js` is under development/not needed at this point, Further updates may not have it.
-
-This branch is a test for a .dll monotor and a kernel level .dll monotor
 
 ![(04) 298 3985 2092 +76 209 1092 4095 info@ollysrestaurant com](https://github.com/Josephfallen/Vail-Anti-Cheat/assets/108951296/53009d86-7c15-4875-b94b-0cc56cb9a234)
