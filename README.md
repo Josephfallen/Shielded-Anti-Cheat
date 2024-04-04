@@ -5,7 +5,10 @@ Description:
 Shielded DLL Monitor is an advanced anti-cheat solution designed to meticulously watch and safeguard against unauthorized DLL (Dynamic Link Library) changes within gaming environments. As one of the most common methods employed by cheaters to manipulate and exploit games, unauthorized DLL alterations pose a significant threat to fair play and game integrity.
 
 ### Application info
-`Server.js` is under development/not needed at this point, Further updates may not have it.
+
+> [!INFO]  
+> `Server.js` is under development/not needed at this point, Further updates may not have it.
+
 > [!IMPORTANT]  
 > DO NOT RUN THE KERNEL LEVEL `.dll` ANTICHEAT, IT WILL BLUESCREEN ANY SYSTEM!
 This branch is a test for a .dll monotor and a kernel level .dll monotor
