@@ -14,13 +14,15 @@ Key Features:
     
 By choosing Shielded DLL Monitor, game developers and administrators can maintain a level playing field, uphold game integrity, and enhance the overall gaming experience for all players. Ensure fair play, protect your game, and deter cheaters with our comprehensive DLL monitoring solution.
 
-
+> [!NOTE] 
+> `Server.js` is under development/not needed at this point, Further updates may not have it.
+> 
 ## Info
 #### How to unban a player 
 ```cpp
 UnbanPlayer(PlayerId);
 ```
-#### Application info
-`Server.js` is under development/not needed at this point, Further updates may not have it.
+
+
 
 ![(04) 298 3985 2092 +76 209 1092 4095 info@ollysrestaurant com](https://github.com/Josephfallen/Vail-Anti-Cheat/assets/108951296/53009d86-7c15-4875-b94b-0cc56cb9a234)
