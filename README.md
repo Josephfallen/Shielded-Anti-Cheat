@@ -1,5 +1,5 @@
 > [!NOTE] 
-> `Server.js` is under development/not needed at this point, Further updates may not have it.
+> This is under **heavy** development
 
 > [!WARNING]
 > DO NOT RUN THE KERNEL LEVEL `.dll` ANTICHEAT, IT WILL BLUESCREEN ANY SYSTEM!
