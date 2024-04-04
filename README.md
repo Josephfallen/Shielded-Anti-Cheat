@@ -22,7 +22,7 @@ Key Features:
     
 By choosing Shielded DLL Monitor, game developers and administrators can maintain a level playing field, uphold game integrity, and enhance the overall gaming experience for all players. Ensure fair play, protect your game, and deter cheaters with our comprehensive DLL monitoring solution.
 
-> [!TIP]
+
 ```
 UnbanPlayer(PlayerId);
 ```
