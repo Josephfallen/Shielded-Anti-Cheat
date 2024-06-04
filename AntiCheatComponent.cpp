@@ -1,6 +1,8 @@
 #include "AntiCheatComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "Engine/World.h"
+#include "Http.h"
+#include "Json.h"
 #include "jwt-cpp/jwt.h"
 #include "Windows/MinWindows.h"
 #include <Psapi.h>
@@ -12,12 +14,17 @@ UAntiCheatComponent::UAntiCheatComponent()
     // Constructor
 }
 
-bool UAntiCheatComponent::IsDebuggerPresent()
+UAntiCheatComponent::~UAntiCheatComponent()
+{
+    // Destructor
+}
+
+bool UAntiCheatComponent::IsDebuggerPresent() const
 {
     return ::IsDebuggerPresent();
 }
 
-bool UAntiCheatComponent::IsInsideVirtualMachine()
+bool UAntiCheatComponent::IsInsideVirtualMachine() const
 {
     int32 CPUInfo[4] = { -1 };
     __cpuid(CPUInfo, 1);
@@ -33,7 +40,7 @@ bool UAntiCheatComponent::IsInsideVirtualMachine()
     return isVM;
 }
 
-bool UAntiCheatComponent::ScanForHooks()
+bool UAntiCheatComponent::ScanForHooks() const
 {
     const char* hookLibs[] = { "Detours.dll", "MSHook.dll" };
 
@@ -70,11 +77,12 @@ void UAntiCheatComponent::ValidateGameTime()
 
     if (FMath::Abs(CurrentGameTime - ServerTime) > 1.0f)
     {
+        // Assuming PlayerId is a class member variable
         KickPlayer(PlayerId);
     }
 }
 
-void UAntiCheatComponent::ValidatePlayerData(FString PlayerId, float Speed, float Visibility, float Accuracy)
+void UAntiCheatComponent::ValidatePlayerData(const FString& PlayerId, float Speed, float Visibility, float Accuracy)
 {
     // Generate JWT token
     FString Token = GenerateJWTToken();
@@ -102,21 +110,24 @@ void UAntiCheatComponent::ValidatePlayerData(FString PlayerId, float Speed, floa
 
     if (ScanForDLLs())
     {
-        banPlayer(PlayerId);
+        BanPlayer(PlayerId);
+        return;
     }
 
+    // Assuming GameFilePath, ExpectedChecksum, MemoryAddress, and MemorySize are class member variables
     bool IsFileIntegrityValid = CheckFileIntegrity(GameFilePath, ExpectedChecksum);
     bool IsMemoryProtected = ProtectMemory(MemoryAddress, MemorySize);
 
     if (!IsFileIntegrityValid || !IsMemoryProtected)
     {
         KickPlayer(PlayerId);
+        return;
     }
 
-    FVector ServerPosition = FVector::ZeroVector;
-    FVector ClientPosition = FVector::ZeroVector;
-    int32 ServerScore = 0;
-    int32 ClientScore = 0;
+    FVector ServerPosition = FVector::ZeroVector;  // Replace with actual server position
+    FVector ClientPosition = FVector::ZeroVector;  // Replace with actual client position
+    int32 ServerScore = 0;  // Replace with actual server score
+    int32 ClientScore = 0;  // Replace with actual client score
 
     bool IsValidState = ValidatePlayerPosition(ServerPosition, ClientPosition, 10.0f);
     bool IsValidScore = ValidatePlayerScore(ServerScore, ClientScore);
@@ -148,16 +159,16 @@ void UAntiCheatComponent::OnValidateResponseReceived(FHttpRequestPtr Request, FH
                     }
                     FTimerHandle TimerHandle;
                     GetWorld()->GetTimerManager().SetTimer(TimerHandle, [PlayerController]()
-                        {
-                            PlayerController->Kick();
-                        }, 5.f, false);
+                    {
+                        PlayerController->Kick();
+                    }, 5.f, false);
                 }
             }
         }
     }
 }
 
-FString UAntiCheatComponent::GenerateJWTToken()
+FString UAntiCheatComponent::GenerateJWTToken() const
 {
     std::string secret_key = "your_secret_key";
     jwt::claims claims;
@@ -173,7 +184,7 @@ FString UAntiCheatComponent::GenerateJWTToken()
     return FString(token.c_str());
 }
 
-bool UAntiCheatComponent::ScanForDLLs()
+bool UAntiCheatComponent::ScanForDLLs() const
 {
     const char* targetDLLs[] = { "nppPluginList.dll", "enco.dll" };
 
@@ -184,7 +195,7 @@ bool UAntiCheatComponent::ScanForDLLs()
     {
         for (unsigned int i = 0; i < (cbNeeded / sizeof(HMODULE)); i++)
         {
-            char szModName[MAX c_PATH];
+            char szModName[MAX_PATH];
             if (GetModuleFileNameExA(hProcess, hMods[i], szModName, sizeof(szModName) / sizeof(char)))
             {
                 for (const char* targetDLL : targetDLLs)
@@ -200,7 +211,7 @@ bool UAntiCheatComponent::ScanForDLLs()
     return false;
 }
 
-void UAntiCheatComponent::banPlayer(FString PlayerId)
+void UAntiCheatComponent::BanPlayer(const FString& PlayerId)
 {
     BanList.Add(PlayerId);
     KickPlayer(PlayerId);
@@ -211,24 +222,24 @@ void UAntiCheatComponent::UnbanPlayer(const FString& PlayerId)
     BanList.Remove(PlayerId);
 }
 
-void UAntiCheatComponent::KickPlayer(FString PlayerId)
+void UAntiCheatComponent::KickPlayer(const FString& PlayerId)
 {
     APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
     if (PlayerController)
     {
         if (GEngine)
         {
-            GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Player %s has been banned for cheating!"), *PlayerId));
+            GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Player %s has been kicked for cheating!"), *PlayerId));
         }
         FTimerHandle TimerHandle;
         GetWorld()->GetTimerManager().SetTimer(TimerHandle, [PlayerController]()
-            {
-                PlayerController->Kick();
-            }, 5.f, false);
+        {
+            PlayerController->Kick();
+        }, 5.f, false);
     }
 }
 
-bool UAntiCheatComponent::CheckFileIntegrity(FString FilePath, FString ExpectedChecksum)
+bool UAntiCheatComponent::CheckFileIntegrity(const FString& FilePath, const FString& ExpectedChecksum) const
 {
     TArray<uint8> FileData;
     if (FFileHelper::LoadFileToArray(FileData, *FilePath))
@@ -242,13 +253,13 @@ bool UAntiCheatComponent::CheckFileIntegrity(FString FilePath, FString ExpectedC
     return true;
 }
 
-bool UAntiCheatComponent::ProtectMemory(void* MemoryAddress, SIZE_T Size)
+bool UAntiCheatComponent::ProtectMemory(void* MemoryAddress, SIZE_T Size) const
 {
     DWORD OldProtection;
     return VirtualProtect(MemoryAddress, Size, PAGE_READWRITE, &OldProtection);
 }
 
-bool UAntiCheatComponent::ValidatePlayerPosition(FVector ServerPosition, FVector ClientPosition, float Tolerance)
+bool UAntiCheatComponent::ValidatePlayerPosition(const FVector& ServerPosition, const FVector& ClientPosition, float Tolerance) const
 {
     float Distance = FVector::Dist(ServerPosition, ClientPosition);
     if (Distance > Tolerance)
@@ -258,11 +269,39 @@ bool UAntiCheatComponent::ValidatePlayerPosition(FVector ServerPosition, FVector
     return true;
 }
 
-bool UAntiCheatComponent::ValidatePlayerScore(int32 ServerScore, int32 ClientScore)
+bool UAntiCheatComponent::ValidatePlayerScore(int32 ServerScore, int32 ClientScore) const
 {
     if (ClientScore != ServerScore)
     {
         return false;
     }
     return true;
+}
+
+void UAntiCheatComponent::LogAntiCheatEvent(const FString& Message) const
+{
+    if (GEngine)
+    {
+        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, Message);
+    }
+}
+
+FString UAntiCheatComponent::CalculateFileChecksum(const FString& FilePath) const
+{
+    TArray<uint8> FileData;
+    if (FFileHelper::LoadFileToArray(FileData, *FilePath))
+    {
+        return FMD5::HashAnsiString((const ANSICHAR*)FileData.GetData(), FileData.Num());
+    }
+    return FString();
+}
+
+void UAntiCheatComponent::SendHttpRequest(const FString& Url, const FString& Payload) const
+{
+    TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = FHttpModule::Get().CreateRequest();
+    Request->SetVerb("POST");
+    Request->SetURL(Url);
+    Request->SetHeader("Content-Type", "application/json");
+    Request->SetContentAsString(Payload);
+    Request->ProcessRequest();
 }
