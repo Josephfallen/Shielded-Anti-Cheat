@@ -3,5 +3,4 @@
 
 > [!WARNING]
 > DO NOT RUN THE KERNEL LEVEL `.dll` ANTICHEAT, IT WILL BLUESCREEN ANY SYSTEM!
-> 
-This branch is a test for a .dll monotor and a kernel level .dll monotor
+This branch is a test for a .dll monitor and a kernel level .dll monitor
